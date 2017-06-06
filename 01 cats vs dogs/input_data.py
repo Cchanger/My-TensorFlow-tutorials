@@ -100,7 +100,7 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     
     label = input_queue[1]
     image_contents = tf.read_file(input_queue[0])   #read_file return a tensor of type string从队列中读取
-    image = tf.image.decode_jpeg(image_contents, channels=3) #这个地址用jpg格式来解码，得出unit8 tensor
+    image = tf.image.decode_jpeg(image_contents, channels=3) #这个地址用jpg格式来解码，得出unit8 tensor3-D with shape [height, width, channels]
     
     ######################################
     # data argumentation should go to here
