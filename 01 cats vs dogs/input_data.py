@@ -1,3 +1,4 @@
+#encoding: utf-8
 #By @Kevin Xu
 #kevin28520@gmail.com
 #Youtube: https://www.youtube.com/channel/UCVCSn4qQXTDAtGWpWAe4Plw
@@ -41,32 +42,35 @@ def get_files(file_dir):
     Args:
         file_dir: file directory
     Returns:
-        list of images and labels
+        list of images and labels（子图像的路径，labels）
     '''
     cats = []
     label_cats = []
     dogs = []
     label_dogs = []
-    for file in os.listdir(file_dir):
-        name = file.split(sep='.')
+    for file in os.listdir(file_dir):                #读取子文件夹
+        name = file.split(sep='.')                   #图片的命名方式为 cat.0.jpg
         if name[0]=='cat':
-            cats.append(file_dir + file)
-            label_cats.append(0)
+            cats.append(file_dir + file)             #分类好图片的地址
+            label_cats.append(0)                     #分类好label:0,1
         else:
             dogs.append(file_dir + file)
             label_dogs.append(1)
     print('There are %d cats\nThere are %d dogs' %(len(cats), len(dogs)))
     
-    image_list = np.hstack((cats, dogs))
-    label_list = np.hstack((label_cats, label_dogs))
+    image_list = np.hstack((cats, dogs))             #堆叠
+    label_list = np.hstack((label_cats, label_dogs)) #堆叠
     
+    #shuffle  #新建一个中间量 temp 免得把原数据处理了
     temp = np.array([image_list, label_list])
     temp = temp.transpose()
     np.random.shuffle(temp)
+    #shuffle
     
+    #这里还是把原数据处理了
     image_list = list(temp[:, 0])
     label_list = list(temp[:, 1])
-    label_list = [int(i) for i in label_list]
+    label_list = [int(i) for i in label_list]    #改成int类型
     
     
     return image_list, label_list
@@ -79,10 +83,10 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     Args:
         image: list type
         label: list type
-        image_W: image width
+        image_W: image width       （这里是目标尺寸）
         image_H: image height
         batch_size: batch size
-        capacity: the maximum elements in queue
+        capacity: the maximum elements in queue    （队列中的最大元素）
     Returns:
         image_batch: 4D tensor [batch_size, width, height, 3], dtype=tf.float32
         label_batch: 1D tensor [batch_size], dtype=tf.int32
@@ -91,8 +95,8 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     image = tf.cast(image, tf.string)
     label = tf.cast(label, tf.int32)
 
-    # make an input queue
-    input_queue = tf.train.slice_input_producer([image, label])
+    # make an input queue  生成队列queue
+    input_queue = tf.train.slice_input_producer([image, label])   #现在还是路径格式
     
     label = input_queue[1]
     image_contents = tf.read_file(input_queue[0])
