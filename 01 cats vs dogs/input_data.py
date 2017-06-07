@@ -116,7 +116,7 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
                                                 num_threads= 64, 
                                                 capacity = capacity)
     
-    #you can also use shuffle_batch 
+    #you can also use shuffle_batch 因为之前已经打乱了路径所以下面了数据打乱可以不使用
 #    image_batch, label_batch = tf.train.shuffle_batch([image,label],
 #                                                      batch_size=BATCH_SIZE,
 #                                                      num_threads=64,
@@ -149,9 +149,9 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
 #image_list, label_list = get_files(train_dir)
 #image_batch, label_batch = get_batch(image_list, label_list, IMG_W, IMG_H, BATCH_SIZE, CAPACITY)
 #
-#with tf.Session() as sess:
-#    i = 0
-#    coord = tf.train.Coordinator()
+#with tf.Session() as sess:  #要用tensorflow就要启动一个会话Session
+#    i = 0                   #测试用  i<1
+#    coord = tf.train.Coordinator()   #监控queue，inqueue 和 dequeue
 #    threads = tf.train.start_queue_runners(coord=coord)
 #    
 #    try:
